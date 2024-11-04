@@ -14,6 +14,11 @@ int won = 10;                                   // Winning player
 bool W = false;                                 // Winner status
 char choice;                                    // Mode selection
 char arche1, arche2, ch1, ch2, pick;            // Character choices and abilities
+char endchoice;
+char choice1;
+char choice2;
+char charchoice;
+char playerarche;
 
 int main() {
 top:
@@ -28,6 +33,7 @@ top:
         TicTacToe();
 
         for (int i = 0; i < 5; i++) {
+        goback:
             if (!W) {
                 choose(0);      // Player 1's move
                 TicTacToe();
@@ -39,40 +45,73 @@ top:
                     won = 11;
                     break;
                 }
+                else {
+                    cout << "Invalid input, Try again";
+                    goto goback;
+                }
 
                 choose(-1);     // Player 2's move
                 TicTacToe();
                 win();
                 if (W) break;
+                else {
+                    cout << "Invalid input, Try again";
+                    goto goback;
+                }
             }
         }
 
         cout << "\nPlay again? (y/n): ";
-        cin >> choice;
-        if (choice == 'y' || choice == 'Y') goto top;
+        cin >> endchoice;
+        if (endchoice == 'y' || endchoice == 'Y') goto top;
         return 0;
     }
 
     else if (choice == '2') {
         cout << "You have chosen Battle Tic Tac Toe.\n";
 
-        cout << "Player 1, choose an archetype (A for Alchemist, P for Paladin): ";
-        cin >> arche1;
+    archechoice:
 
-        cout << "Player 2, choose an archetype (A for Alchemist, P for Paladin): ";
-        cin >> arche2;
+        if (playerarche == 'A' || 'P') {
+            cout << "Player 1, choose an archetype (A for Alchemist, P for Paladin): ";
+            cin >> arche1;
 
-        cout << "Player 1, choose a character (A-Z, a-z, ?, !, *, ~, $, %, #): ";
-        cin >> ch1;
+            cout << "Player 2, choose an archetype (A for Alchemist, P for Paladin): ";
+            cin >> arche2;
+        }
+        else {
+            cout << "Invalid archetype choice, try again";
+            goto archechoice;
+        }
 
-        cout << "Player 2, choose a character (A-Z, a-z, ?, !, *, ~, $, %, #): ";
-        cin >> ch2;
+    player:
+        if (choice1 == 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'N', 'M', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+            '?', '!', '*', '~', '$', '%', '#') {
+
+            cout << "Player 1, choose a character (A-Z, a-z, ?, !, *, ~, $, %, #): ";
+            cin >> ch1;
+        }
+
+        if (choice2 == 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'N', 'M', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+            '?', '!', '*', '~', '$', '%', '#') {
+
+            cout << "Player 2, choose a character (A-Z, a-z, ?, !, *, ~, $, %, #): ";
+            cin >> ch2;
+        }
+
+        else {
+            cout << "\nInvalid character, please try again.\n";
+            goto player;
+        }
 
         Newgame();
         BatTicTacToe();
 
         for (int i = 0; i < 5; i++) {
             if (!W) {
+            a1:
                 cout << "\nPlayer 1, enter 'b' to move or 'c' to use ability: \n";
                 cin >> pick;
 
@@ -80,6 +119,10 @@ top:
                 else if (pick == 'c') {
                     if (arche1 == 'A') alchemist(1);
                     else if (arche1 == 'P') paladin(1);
+                    else {
+                        cout << "Invalid input, Try again";
+                        goto a1;
+                    }
                 }
 
                 BatTicTacToe();
@@ -91,7 +134,15 @@ top:
                     won = 11;
                     break;
                 }
+                if (!W) {
+                    goto a2;
+                }
 
+                else {
+                    cout << "\nInvalid input, please try again.\n";
+                    goto a1;
+                }
+            a2:
                 cout << "\nplayer 2, enter 'b' to move or 'c' to use ability: \n";
                 cin >> pick;
 
@@ -99,12 +150,26 @@ top:
                 else if (pick == 'c') {
                     if (arche2 == 'A') alchemist(2);
                     else if (arche2 == 'P') paladin(2);
+                    else {
+                        cout << "Invalid input, Try again";
+                        goto a2;
+                    }
                 }
 
                 BatTicTacToe();
                 win();
                 if (W) break;
+
+                if (!W) {
+                    goto a1;
+                }
+                else {
+                    cout << "\nInvalid input, please try again.\n";
+                    goto a2;
+                }
             }
+
+
         }
 
         cout << "\nPlay again? (y/n): ";
@@ -121,6 +186,7 @@ top:
 
 void TicTacToe()                                                            // display function
 {
+move:
     if (grid[1] == 1)								                        // changes number 1 on the board to an O or X depending on which player chooses
         cout << grid[1] << "\t";
 
@@ -209,10 +275,15 @@ void TicTacToe()                                                            // d
     else if (grid[9] == -1) {
         cout << "X\t";
     }
+    else {
+        cout << "Invalid input, Try again";
+        goto move;
+    }
 }
 
 void BatTicTacToe()    								                        // changes the numbers on the board to a character the players choose from
 {
+batmove:
     if (grid[1] == 1)
         cout << grid[1] << "\t";
 
@@ -222,6 +293,11 @@ void BatTicTacToe()    								                        // changes the numbers on
     else if (grid[1] == -1) {
         cout << ch2 << "\t";
     }
+    else if (arche1 == 'A') alchemist(0);
+    else if (arche2 == 'A') alchemist(-1);
+    else if (arche1 == 'P') paladin(0);
+    else if (arche2 == 'P') paladin(-1);
+
     if (grid[2] == 2)
         cout << grid[2] << "\t";
 
@@ -231,6 +307,11 @@ void BatTicTacToe()    								                        // changes the numbers on
     else if (grid[2] == -1) {
         cout << ch2 << "\t";
     }
+    else if (arche1 == 'A') alchemist(0);
+    else if (arche2 == 'A') alchemist(-1);
+    else if (arche1 == 'P') paladin(0);
+    else if (arche2 == 'P') paladin(-1);
+
     if (grid[3] == 3)
         cout << grid[3] << "\n\n";
 
@@ -240,6 +321,11 @@ void BatTicTacToe()    								                        // changes the numbers on
     else if (grid[3] == -1) {
         cout << ch2 << "\t\n\n";
     }
+    else if (arche1 == 'A') alchemist(0);
+    else if (arche2 == 'A') alchemist(-1);
+    else if (arche1 == 'P') paladin(0);
+    else if (arche2 == 'P') paladin(-1);
+
     if (grid[4] == 4)
         cout << grid[4] << "\t";
 
@@ -249,6 +335,10 @@ void BatTicTacToe()    								                        // changes the numbers on
     else if (grid[4] == -1) {
         cout << ch2 << "\t";
     }
+    else if (arche1 == 'A') alchemist(0);
+    else if (arche2 == 'A') alchemist(-1);
+    else if (arche1 == 'P') paladin(0);
+    else if (arche2 == 'P') paladin(-1);
 
     if (grid[5] == 5)
         cout << grid[5] << "\t";
@@ -259,6 +349,10 @@ void BatTicTacToe()    								                        // changes the numbers on
     else if (grid[5] == -1) {
         cout << ch2 << "\t";
     }
+    else if (arche1 == 'A') alchemist(0);
+    else if (arche2 == 'A') alchemist(-1);
+    else if (arche1 == 'P') paladin(0);
+    else if (arche2 == 'P') paladin(-1);
 
     if (grid[6] == 6)
         cout << grid[6] << "\n\n";
@@ -270,6 +364,10 @@ void BatTicTacToe()    								                        // changes the numbers on
     else if (grid[6] == -1) {
         cout << ch2 << "\t\n\n";
     }
+    else if (arche1 == 'A') alchemist(0);
+    else if (arche2 == 'A') alchemist(-1);
+    else if (arche1 == 'P') paladin(0);
+    else if (arche2 == 'P') paladin(-1);
 
     if (grid[7] == 7)
         cout << grid[7] << "\t";
@@ -280,6 +378,10 @@ void BatTicTacToe()    								                        // changes the numbers on
     else if (grid[7] == -1) {
         cout << ch2 << "\t";
     }
+    else if (arche1 == 'A') alchemist(0);
+    else if (arche2 == 'A') alchemist(-1);
+    else if (arche1 == 'P') paladin(0);
+    else if (arche2 == 'P') paladin(-1);
 
     if (grid[8] == 8)
         cout << grid[8] << "\t";
@@ -290,6 +392,10 @@ void BatTicTacToe()    								                        // changes the numbers on
     else if (grid[8] == -1) {
         cout << ch2 << "\t";
     }
+    else if (arche1 == 'A') alchemist(0);
+    else if (arche2 == 'A') alchemist(-1);
+    else if (arche1 == 'P') paladin(0);
+    else if (arche2 == 'P') paladin(-1);
 
     if (grid[9] == 9)
         cout << grid[9];
@@ -297,9 +403,16 @@ void BatTicTacToe()    								                        // changes the numbers on
     else if (grid[9] == 0) {
         cout << ch1 << "\t";
     }
-
     else if (grid[9] == -1) {
         cout << ch2 << "\t";
+    }
+    else if (arche1 == 'A') alchemist(0);
+    else if (arche2 == 'A') alchemist(-1);
+    else if (arche1 == 'P') paladin(0);
+    else if (arche2 == 'P') paladin(-1);
+    else {
+        cout << "invalid move or input try again.";
+        goto batmove;
     }
 }
 
@@ -470,8 +583,6 @@ void alchemist(int playerNumber) {
                 break;
             }
         }
-
-
         if (alchemistPosition != -1) {                                                                          // Swap positions and values
             grid[alchemistPosition] = opponentMarker;                                                           // Move Alchemist to opponent's position
             grid[opponentPosition] = (playerNumber == 1 ? 0 : -1);                                              // Move opponent to Alchemist's position
@@ -489,11 +600,9 @@ void paladin(int playerNumber) {
     cout << "Player " << playerNumber << " (Paladin), choose your current position (1-9): ";
     cin >> movefrom;
 
-
     if (grid[movefrom] == (playerNumber == 1 ? 0 : -1)) {                                                       // Check if the movefrom position is occupied by the Paladin
         cout << "Choose an adjacent position to move to (1-9): ";
         cin >> moveto;
-
 
         bool isAdjacent = false;                                                                                // Check if the target position is adjacent and unoccupied
         if ((movefrom == 1 && (moveto == 2 || moveto == 4)) ||
@@ -507,14 +616,14 @@ void paladin(int playerNumber) {
             (movefrom == 9 && (moveto == 6 || moveto == 8))) {
             isAdjacent = true;
         }
-
         if (isAdjacent && (grid[moveto] >= 1)) {                                                                // Ensure target position is not occupied
             grid[moveto] = (playerNumber == 1 ? 0 : -1);                                                        // Move Paladin to new position
             grid[movefrom] = (playerNumber == 1 ? 1 : -1);                                                      // Mark original position as free
             cout << "Paladin moved to position " << moveto << "!\n";
         }
+
         else {
-            cout << "Invalid move. Try again.\n";
+            cout << "Space is either occupied or out of range. Try again.\n";
             paladin(playerNumber);                                                                              // Retry if the input was invalid
         }
     }
@@ -522,4 +631,5 @@ void paladin(int playerNumber) {
         cout << "You are not in that position. Try again.\n";
         paladin(playerNumber);                                                                                  // Retry if the input was invalid
     }
+    grid[movefrom] = movefrom;
 }
